@@ -94,33 +94,6 @@ The system is trained to identify the following specific conditions:
 ![YOLOv12 Confusion Matrix](screenshots/yolov12_confusion_matrix.png)
 ---
 
-## Installation & Setup
-
-1.  **Clone the Repository**
-    ```bash
-    git clone [https://github.com/Anikaith05/durian-disease-detection](https://github.com/Anikaith05/durian-disease-detection)
-    cd durian-disease-detection
-    ```
-
-2.  **Install Dependencies**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3.  **Install & Configure XAMPP**
-    * Download and install [XAMPP](https://www.apachefriends.org/).
-    * Open the **XAMPP Control Panel** and start the **MySQL** module.
-    * Open your browser and go to `http://localhost/phpmyadmin`.
-    * Create a new database (ensure the name matches your project configuration).
-    * **Port Check:** Check the "Port" number listed next to MySQL in the XAMPP Control Panel (default is `3306`). Open `app.py` and ensure the database connection string uses this exact port number.
-
-4.  **Set Up Database**
-    * Import the `db.sql` file into your newly created MySQL database via phpMyAdmin.
-
-5.  **Run the Application**
-    ```bash
-    python app.py
-    ```
 ## Model Evaluation
 * **DenseNet-121:** Achieved **~95% Accuracy** on leaf classification.
 * **ResNet-101:** Achieved **~94% Accuracy** with high precision in identifying healthy leaves.
