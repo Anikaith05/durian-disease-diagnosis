@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Performance | Durian AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-dark: #0a2e0a; --card-bg: #113311; --green: #00ff00; --lime: #00cc00;
+      --glow: 0 0 20px #00ff00, 0 0 40px #00ff00;
+    }
+    [data-theme=dark]{--bg-dark:#000;--card-bg:#001100;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:'Share Tech Mono',monospace;
+      background:var(--bg-dark) url('../static/assets/durian-bg.jpg') center/cover fixed;
+      color:var(--green);min-height:100vh;position:relative;
+      text-shadow:0 0 5px var(--green);padding:2rem;
+    }
+    .overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,40,0,.9);z-index:1;}
+
+    nav{
+      position:fixed;top:20px;left:50%;transform:translateX(-50%);
+      background:rgba(0,50,0,.8);backdrop-filter:blur(12px);
+      border:2px solid #00ff00;border-radius:12px;
+      padding:.8rem 2rem;display:flex;align-items:center;gap:1.5rem;
+      z-index:1000;box-shadow:0 0 20px rgba(0,255,0,.6);
+      font-family:'Orbitron',sans-serif;
+    }
+    .brand{font-size:1.6rem;color:var(--green);font-weight:800;text-shadow:0 0 15px var(--green);}
+    nav a{color:var(--green);text-decoration:none;padding:.5rem 1rem;border-radius:8px;transition:.3s;}
+    nav a:hover{background:var(--lime);color:#000;border:1px solid #00ff00;box-shadow:0 0 15px var(--green);}
+
+    .theme-btn{
+      position:fixed;top:25px;right:25px;background:rgba(0,50,0,.8);border:2px solid var(--green);
+      width:58px;height:58px;border-radius:50%;font-size:1.7rem;color:var(--green);cursor:pointer;
+      z-index:1000;box-shadow:0 0 15px rgba(0,255,0,.5);transition:.3s;
+    }
+    .theme-btn:hover{transform:scale(1.1);box-shadow:0 0 25px var(--green);}
+
+    .container{
+      position:relative;z-index:10;max-width:1100px;margin:160px auto 6rem;
+    }
+    h1{
+      font-family:'Orbitron',sans-serif;text-align:center;font-size:3.2rem;color:var(--lime);
+      margin-bottom:1rem;text-shadow:0 0 30px var(--green);
+      animation:neon 3s infinite;
+    }
+    @keyframes neon{
+      0%,100%{text-shadow:0 0 30px var(--green);}
+      50%{text-shadow:0 0 60px var(--green), 0 0 90px var(--green);}
+    }
+
+    .selector{
+      text-align:center;margin:2.5rem 0;
+    }
+    select{
+      background:var(--card-bg);color:var(--lime);border:2px solid var(--green);
+      padding:1rem 2.5rem;font-size:1.4rem;font-family:'Orbitron',sans-serif;
+      border-radius:12px;box-shadow:0 0 25px rgba(0,255,0,.6);
+      cursor:pointer;outline:none;transition:.4s;
+    }
+    select:hover{box-shadow:0 0 40px var(--green);transform:scale(1.05);}
+
+    .model-section{
+      display:none;background:var(--card-bg);border:2px solid var(--green);
+      border-radius:16px;padding:3rem;margin-top:2rem;
+      box-shadow:0 0 50px rgba(0,255,0,.5);animation:fadeIn 0.8s forwards;
+    }
+    @keyframes fadeIn{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    .model-section.active{display:block;}
+
+    h2{
+      font-family:'Orbitron',sans-serif;font-size:2.5rem;color:var(--lime);
+      text-align:center;margin-bottom:2rem;text-shadow:0 0 25px var(--green);
+    }
+
+    table{
+      width:100%;border-collapse:collapse;margin:2rem 0;
+      background:rgba(0,50,0,.7);border:2px solid var(--lime);
+      box-shadow:0 0 20px rgba(0,255,0,.3);
+    }
+    th, td{
+      padding:1.2rem;text-align:center;border:1px solid var(--green);
+      font-size:1.15rem;
+    }
+    th{
+      background:var(--lime);color:#000;font-weight:700;
+      text-shadow:0 0 10px #000;
+    }
+    tr:hover{
+      background:rgba(0,255,0,.25);box-shadow:0 0 20px var(--green);
+    }
+    .best{
+      font-weight:700;
+    }
+
+    footer{
+      margin-top:auto;position:relative;z-index:10;
+      background:rgba(0,40,0,.8);border-top:2px solid var(--green);
+      padding:2rem;text-align:center;font-size:.9rem;color:var(--green);
+      box-shadow:0 -10px 20px rgba(0,255,0,.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <button class="theme-btn" onclick="toggleTheme()">Theme</button>
+
+  <nav>
+    <div class="brand">Durian AI</div>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('model_accuracy') }}">Model</a>
+    <a href="{{ url_for('predict_leaf') }}">Leaf</a>
+    <a href="{{ url_for('predict_fruit') }}">Fruit</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </nav>
+
+  <div class="container">
+    <h1>MODEL PERFORMANCE</h1>
+
+    <div class="selector">
+      <select id="modelType" onchange="showModel()">
+        <option value="">— Select Model Type —</option>
+        <option value="leaf">Leaf Disease Classification</option>
+        <option value="fruit">Fruit Defect Detection</option>
+      </select>
+    </div>
+
+    <!-- LEAF CLASSIFICATION -->
+    <div id="leaf" class="model-section">
+      <h2>Leaf Disease Classification Models</h2>
+      <table>
+        <tr>
+          <th>Class</th>
+          <th>DenseNet-121<br>F1-Score</th>
+          <th>ResNet-50<br>F1-Score</th>
+        </tr>
+        <tr><td>ALGAL_LEAF_SPOT</td><td>0.93</td><td>0.931</td></tr>
+        <tr><td>ALLOCARIDARA_ATTACK</td><td>0.96</td><td>0.959</td></tr>
+        <tr><td>HEALTHY_LEAF</td><td>0.95</td><td>0.956</td></tr>
+        <tr><td>LEAF_BLIGHT</td><td>0.95</td><td>0.968</td></tr>
+        <tr><td>PHOMOPSIS_LEAF_SPOT</td><td>0.92</td><td>0.915</td></tr>
+        <tr><td><strong>Accuracy</strong></td><td>94.38%</td><td class="best">94.72%</td></tr>
+      </table>
+    </div>
+
+    <!-- FRUIT DETECTION -->
+    <div id="fruit" class="model-section">
+      <h2>Fruit Defect Detection Models</h2>
+      <table>
+        <tr>
+          <th>Class</th>
+          <th>YOLOv11<br>mAP@50</th>
+          <th>YOLOv12<br>mAP@50</th>
+        </tr>
+        <tr><td>damage</td><td>0.839</td><td>0.845</td></tr>
+        <tr><td>fungus</td><td>0.917</td><td>0.920</td></tr>
+        <tr><td>worm</td><td>0.993</td><td>0.993</td></tr>
+        <tr><td><strong>All Classes</strong></td><td>0.917</td><td class="best">0.919</td></tr>
+      </table>
+    </div>
+  </div>
+
+
+  <script>
+    function toggleTheme(){
+      document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+    }
+
+    function showModel() {
+      const selection = document.getElementById('modelType').value;
+      document.querySelectorAll('.model-section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      if (selection) {
+        document.getElementById(selection).classList.add('active');
+      }
+    }
+
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const type = params.get('type');
+      if (type === 'leaf' || type === 'fruit') {
+        document.getElementById('modelType').value = type;
+        showModel();
+      }
+    };
+  </script>
+</body>
+</html>

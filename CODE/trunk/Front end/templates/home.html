@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | Durian AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-dark: #0a2e0a;
+      --card-bg: #113311;
+      --input-bg: #0a1f0a;
+      --green: #00ff00;
+      --lime: #00cc00;
+      --gold: #ffd700;
+      --red: #ff3333;
+      --glow: 0 0 20px #00ff00, 0 0 40px #00ff00;
+    }
+    [data-theme=dark]{
+      --bg-dark: #000000;
+      --card-bg: #001100;
+      --input-bg: #001a00;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
+    body{
+      font-family: 'Share Tech Mono', monospace;
+      background: var(--bg-dark) url('https://media.istockphoto.com/id/2182029393/photo/durian-fruit-in-fruit-orchard.jpg?s=612x612&w=0&k=20&c=RsucxfJVfLUgwSSfb0TltyvMzsEimejW9nVAOW9kmmk=') center/cover fixed;
+      color: var(--green);
+      min-height:100vh;
+      position:relative;
+      text-shadow: 0 0 5px var(--green);
+    }
+    .overlay{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,40,0,.9);z-index:1;
+    }
+
+    /* === NAVBAR === */
+    nav{
+      position:fixed;top:20px;left:50%;transform:translateX(-50%);
+      background:rgba(0,50,0,.8);backdrop-filter:blur(12px);
+      border:2px solid #00ff00;border-radius:12px;
+      padding:.8rem 2rem;display:flex;align-items:center;gap:1.5rem;
+      z-index:1000;box-shadow:0 0 20px rgba(0,255,0,.6);
+      font-family: 'Orbitron', sans-serif;
+    }
+    .brand{
+      font-size:1.6rem;color:var(--green);font-weight:800;
+      text-shadow:0 0 15px var(--green);
+    }
+    nav a{
+      color:var(--green);text-decoration:none;font-weight:600;
+      padding:.5rem 1rem;border-radius:8px;transition:all .3s;
+      border:1px solid transparent;
+    }
+    nav a:hover{
+      background:var(--lime);color:#000;border:1px solid #00ff00;
+      box-shadow:0 0 15px var(--green);
+    }
+
+    /* === THEME TOGGLE === */
+    .theme-btn{
+      position:fixed;top:25px;right:25px;
+      background:rgba(0,50,0,.8);border:2px solid var(--green);
+      width:58px;height:58px;border-radius:50%;
+      font-size:1.7rem;color:var(--green);cursor:pointer;
+      z-index:1000;transition:.3s;
+      box-shadow:0 0 15px rgba(0,255,0,.5);
+    }
+    .theme-btn:hover{transform:scale(1.1);box-shadow:0 0 25px var(--green);}
+
+    /* === MAIN CONTENT === */
+    main{
+      position:relative;z-index:10;
+      max-width:1300px;margin:0 auto;
+      padding:160px 2rem 6rem;
+      display:flex;flex-direction:column;align-items:center;
+    }
+
+    .welcome{
+      text-align:center;margin-bottom:3rem;
+    }
+    .welcome h1{
+      font-family:'Orbitron',sans-serif;
+      font-size:3.5rem;color:var(--lime);
+      text-shadow:0 0 30px var(--green);
+      animation:neon 2s infinite;
+    }
+    @keyframes neon{
+      0%,100%{text-shadow:0 0 30px var(--green);}
+      50%{text-shadow:0 0 60px var(--green),0 0 90px var(--green);}
+    }
+    .welcome p{
+      font-size:1.3rem;margin-top:1rem;opacity:.9;
+    }
+
+    .dashboard{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:2rem;
+      width:100%;
+      max-width:1000px;
+    }
+    .card{
+      background:var(--card-bg);
+      border:2px solid var(--green);
+      border-radius:16px;
+      padding:2rem;
+      box-shadow:0 0 25px rgba(0,255,0,.3), inset 0 0 15px rgba(0,255,0,.1);
+      transition:.5s;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:'';
+      position:absolute;
+      top:-50%;left:-50%;width:200%;height:200%;
+      background:radial-gradient(circle,rgba(0,255,0,.2),transparent);
+      opacity:0;
+      transition:.7s;
+    }
+    .card:hover::before{opacity:1;}
+    .card:hover{
+      transform:translateY(-12px);
+      box-shadow:0 0 40px var(--green), 0 0 60px var(--green);
+    }
+    .card h3{
+      font-family:'Orbitron',sans-serif;
+      color:var(--lime);
+      font-size:1.8rem;
+      margin-bottom:1rem;
+      text-shadow:0 0 20px var(--green);
+    }
+    .card p{
+      font-size:1.1rem;
+      line-height:1.7;
+      opacity:.9;
+    }
+
+    .action-btn{
+      display:inline-block;
+      margin-top:1.5rem;
+      padding:.9rem 1.8rem;
+      background:var(--lime);
+      color:#000;
+      border:2px solid var(--green);
+      border-radius:8px;
+      font-weight:700;
+      font-family:'Orbitron',sans-serif;
+      text-decoration:none;
+      transition:.4s;
+      box-shadow:0 0 15px rgba(0,255,0,.5);
+    }
+    .action-btn:hover{
+      background:var(--green);
+      color:#000;
+      transform:translateY(-3px);
+      box-shadow:0 0 25px var(--green), 0 0 40px var(--green);
+    }
+
+    .logout-btn{
+      margin-top:3rem;
+      padding:.9rem 2rem;
+      background:var(--red);
+      color:#fff;
+      border:2px solid var(--green);
+      border-radius:8px;
+      font-weight:700;
+      font-family:'Orbitron',sans-serif;
+      text-decoration:none;
+      transition:.4s;
+      box-shadow:0 0 20px rgba(255,51,51,.5);
+    }
+    .logout-btn:hover{
+      background:#ff0000;
+      color:#fff;
+      transform:translateY(-3px);
+      box-shadow:0 0 30px #ff0000, 0 0 50px #ff3333;
+    }
+
+    /* === FOOTER === */
+    footer{
+      margin-top:auto;
+      position:relative;
+      z-index:10;
+      background:rgba(0,40,0,.8);
+      border-top:2px solid var(--green);
+      padding:2rem;
+      text-align:center;
+      font-size:.9rem;
+      color:var(--green);
+      box-shadow:0 -10px 20px rgba(0,255,0,.3);
+      width:100%;
+    }
+    .social a{
+      color:var(--green);
+      margin:0 1rem;
+      font-size:1.5rem;
+      transition:.3s;
+    }
+    .social a:hover{
+      color:var(--lime);
+      text-shadow:0 0 15px var(--green);
+    }
+
+    @media(max-width:768px){
+      .welcome h1{font-size:2.5rem}
+      .dashboard{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <button class="theme-btn" onclick="toggleTheme()"></button>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="brand">Durian AI</div>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('model_accuracy') }}">Model</a>
+    <a href="{{ url_for('predict_leaf') }}">Leaf</a>
+    <a href="{{ url_for('predict_fruit') }}">Fruit</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </nav>
+
+  <main>
+    <div class="welcome">
+      <h1>Welcome, {{ user_name }}!</h1>
+      <p>Select a model to detect diseases or defects in durian leaves or fruits.</p>
+    </div>
+
+    <div class="dashboard">
+
+      <!-- LEAF DISEASE DETECTION -->
+      <div class="card">
+        <h3>Leaf Disease Detection</h3>
+        <p>Upload a leaf image to classify 5 critical conditions: <br>
+          <code>ALGAL_LEAF_SPOT</code>, <code>ALLOCARIDARA_ATTACK</code>, <code>HEALTHY_LEAF</code>, <code>LEAF_BLIGHT</code>, <code>PHOMOPSIS_LEAF_SPOT</code>
+        </p>
+        <a href="{{ url_for('home') }}" class="action-btn">Detect Leaf Disease</a>
+      </div>
+
+      <!-- FRUIT DEFECT DETECTION -->
+      <div class="card">
+        <h3>Fruit Defect Detection</h3>
+        <p>Real-time YOLO-based detection of: <br>
+          <code>damage</code>, <code>fungus</code>, <code>worm</code>
+        </p>
+        <a href="{{ url_for('home') }}" class="action-btn">Detect Fruit Defects</a>
+      </div>
+
+      <!-- MODEL ACCURACY -->
+      <div class="card">
+        <h3>Model Performance</h3>
+        <p>View accuracy, precision, recall, and F1-scores for both leaf and fruit models.</p>
+        <a href="{{ url_for('home') }}" class="action-btn">View Accuracy</a>
+      </div>
+
+    </div>
+
+    <!-- LOGOUT -->
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+  </main>
+
+
+
+  <script>
+    function toggleTheme(){
+      document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+    }
+  </script>
+</body>
+</html>

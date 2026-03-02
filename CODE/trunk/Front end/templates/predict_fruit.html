@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predict Fruit | Durian AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-dark: #0a2e0a; --card-bg: #113311; --green: #00ff00; --lime: #00cc00; --red: #ff3333;
+      --glow: 0 0 20px #00ff00, 0 0 40px #00ff00;
+    }
+    [data-theme=dark]{--bg-dark:#000;--card-bg:#001100;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:'Share Tech Mono',monospace;
+      background:var(--bg-dark) url('../static/assets/durian-bg.jpg') center/cover fixed;
+      color:var(--green);min-height:100vh;position:relative;
+      text-shadow:0 0 5px var(--green);padding:2rem;
+    }
+    .overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,40,0,.9);z-index:1;}
+
+    nav{
+      position:fixed;top:20px;left:50%;transform:translateX(-50%);
+      background:rgba(0,50,0,.8);backdrop-filter:blur(12px);
+      border:2px solid #00ff00;border-radius:12px;
+      padding:.8rem 2rem;display:flex;align-items:center;gap:1.5rem;
+      z-index:1000;box-shadow:0 0 20px rgba(0,255,0,.6);
+      font-family:'Orbitron',sans-serif;
+    }
+    .brand{font-size:1.6rem;color:var(--green);font-weight:800;text-shadow:0 0 15px var(--green);}
+    nav a{color:var(--green);text-decoration:none;padding:.5rem 1rem;border-radius:8px;transition:.3s;}
+    nav a:hover{background:var(--lime);color:#000;border:1px solid #00ff00;box-shadow:0 0 15px var(--green);}
+
+    .theme-btn{
+      position:fixed;top:25px;right:25px;background:rgba(0,50,0,.8);border:2px solid var(--green);
+      width:58px;height:58px;border-radius:50%;font-size:1.7rem;color:var(--green);cursor:pointer;
+      z-index:1000;box-shadow:0 0 15px rgba(0,255,0,.5);transition:.3s;
+    }
+    .theme-btn:hover{transform:scale(1.1);box-shadow:0 0 25px var(--green);}
+
+    .container{
+      position:relative;z-index:10;max-width:1000px;margin:160px auto 6rem;
+      background:var(--card-bg);border:2px solid var(--green);border-radius:16px;
+      padding:3rem;box-shadow:0 0 30px rgba(0,255,0,.4);
+    }
+    h1{
+      font-family:'Orbitron',sans-serif;text-align:center;font-size:2.8rem;color:var(--lime);
+      margin-bottom:1.5rem;text-shadow:0 0 25px var(--green);
+    }
+
+    .drop-zone{
+      border:3px dashed var(--green);border-radius:16px;padding:3rem;text-align:center;
+      background:rgba(0,255,0,.05);transition:.3s;cursor:pointer;
+      margin-bottom:1.5rem;
+    }
+    .drop-zone.dragover{background:rgba(0,255,0,.15);border-color:var(--lime);}
+    .drop-zone p{font-size:1.2rem;margin:1rem 0;}
+    .drop-zone input[type="file"]{display:none;}
+
+    .submit-btn{
+      display:block;width:100%;padding:1.2rem;
+      background:var(--lime);color:#000;
+      border:2px solid var(--green);border-radius:8px;
+      font-weight:700;font-size:1.2rem;font-family:'Orbitron',sans-serif;
+      cursor:pointer;transition:.4s;
+      box-shadow:0 0 20px rgba(0,255,0,.6);
+      text-transform:uppercase;letter-spacing:1px;
+      margin-top:1rem;
+    }
+    .submit-btn:hover{
+      background:var(--green);color:#000;
+      transform:translateY(-3px);
+      box-shadow:0 0 30px var(--green), 0 0 50px var(--green);
+    }
+
+    .result{
+      text-align:center;margin:2rem 0;padding:1.5rem;
+      background:rgba(0,255,0,.1);border:2px solid var(--green);border-radius:12px;
+    }
+    .result h3{font-size:1.8rem;color:var(--lime);}
+    .detections{margin-top:1rem;}
+    .detection{
+      background:rgba(0,255,0,.15);padding:.8rem;margin:.5rem 0;
+      border-radius:8px;border:1px solid var(--lime);
+    }
+
+    .uploaded-img{
+      max-width:100%;max-height:500px;margin:2rem auto;display:block;
+      border:3px solid var(--lime);border-radius:16px;
+      box-shadow:0 0 30px rgba(0,255,0,.7);
+    }
+
+    .error{color:var(--red);background:rgba(255,0,0,.1);border:1px solid var(--red);padding:1rem;border-radius:8px;margin:1rem 0;}
+
+    footer{
+      margin-top:auto;position:relative;z-index:10;
+      background:rgba(0,40,0,.8);border-top:2px solid var(--green);
+      padding:2rem;text-align:center;font-size:.9rem;color:var(--green);
+      box-shadow:0 -10px 20px rgba(0,255,0,.3);
+    }
+
+    /* Only add these minimal new styles */
+    .disease-info-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(0, 40, 0, 0.3);
+      border: 1px solid var(--green);
+      border-radius: 12px;
+      text-align: left;
+    }
+
+    .disease-card {
+      background: rgba(0, 30, 0, 0.4);
+      border: 1px solid var(--lime);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .disease-title {
+      color: var(--lime);
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid var(--green);
+      padding-bottom: 0.5rem;
+    }
+
+    .info-row {
+      margin: 0.8rem 0;
+    }
+
+    .info-label {
+      color: var(--green);
+      font-weight: bold;
+      display: inline-block;
+      min-width: 120px;
+    }
+
+    .info-value {
+      color: #aaffaa;
+    }
+
+    .recommendation-list {
+      list-style-type: none;
+      padding-left: 1rem;
+      margin: 0.5rem 0;
+    }
+
+    .recommendation-list li {
+      padding: 0.2rem 0;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .recommendation-list li:before {
+      content: "►";
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-size: 0.8rem;
+    }
+
+    .severity-badge {
+      display: inline-block;
+      padding: 0.2rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-left: 1rem;
+    }
+
+    .severity-high {
+      background-color: rgba(255, 0, 0, 0.2);
+      color: #ff6666;
+      border: 1px solid #ff3333;
+    }
+
+    .severity-moderate {
+      background-color: rgba(255, 255, 0, 0.2);
+      color: #ffff00;
+      border: 1px solid #ffff00;
+    }
+
+    .market-value {
+      background: rgba(0, 255, 0, 0.1);
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin: 0.5rem 0;
+      border: 1px dashed var(--green);
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <button class="theme-btn" onclick="toggleTheme()"></button>
+
+
+  <nav>
+    <div class="brand">Durian AI</div>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('model_accuracy') }}">Model</a>
+    <a href="{{ url_for('predict_leaf') }}">Leaf</a>
+    <a href="{{ url_for('predict_fruit') }}">Fruit</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </nav>
+
+
+  <div class="container">
+    <h1>Fruit Defect Detection (YOLOv11)</h1>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form id="upload-form" method="POST" enctype="multipart/form-data">
+      <div class="drop-zone" id="drop-zone">
+        <p>Drag & drop a durian fruit image or click to upload</p>
+        <input type="file" name="image" id="file-input" accept="image/*" required>
+      </div>
+
+      <button type="submit" id="submit-btn" class="submit-btn" style="display:none;">
+        Detect Defects
+      </button>
+    </form>
+
+    {% if image_url %}
+      <div class="result">
+        <h3>Defects Detected:</h3>
+        <div class="detections">
+          {% for det in detections %}
+            <div class="detection">
+              <strong>{{ det.class_name }}</strong> – Confidence: {{ det.confidence }}%
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- DISEASE INFORMATION SECTION -->
+      {% if disease_data %}
+      <div class="disease-info-section">
+        <h3 style="text-align: center; margin-bottom: 1.5rem;">Defect Analysis & Recommendations</h3>
+        
+        {% for class_name, info in disease_data.items() %}
+        <div class="disease-card">
+          <div class="disease-title">
+            {{ info.name }}
+            <span class="severity-badge severity-{{ info.severity|lower }}">
+              {{ info.severity }} Severity
+            </span>
+          </div>
+          
+          <div class="info-row">
+            <span class="info-label">Description:</span>
+            <span class="info-value">{{ info.description }}</span>
+          </div>
+          
+          <div class="info-row">
+            <span class="info-label">Symptoms:</span>
+            <span class="info-value">{{ info.symptoms }}</span>
+          </div>
+          
+          <div class="info-row">
+            <span class="info-label">Causes:</span>
+            <span class="info-value">{{ info.causes }}</span>
+          </div>
+          
+          <div class="info-row">
+            <span class="info-label">Treatment:</span>
+            <span class="info-value">{{ info.treatment }}</span>
+          </div>
+          
+          <div class="info-row">
+            <span class="info-label">Recommended Actions:</span>
+            <ul class="recommendation-list">
+              {% for recommendation in info.recommendations %}
+              <li>{{ recommendation }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          
+          <div class="market-value">
+            <span class="info-label">Market Value:</span>
+            <span class="info-value">{{ info.market_value }}</span>
+          </div>
+          
+          <div class="info-row">
+            <span class="info-label">Storage Advice:</span>
+            <span class="info-value">{{ info.storage_advice }}</span>
+          </div>
+        </div>
+        {% endfor %}
+        
+        <!-- General Prevention Tips -->
+        <div class="disease-card">
+          <div class="disease-title">General Prevention Tips</div>
+          <ul class="recommendation-list">
+            <li>Regular inspection during fruit development stage</li>
+            <li>Maintain orchard hygiene - remove fallen fruits</li>
+            <li>Use proper harvesting techniques to minimize damage</li>
+            <li>Implement integrated pest management (IPM)</li>
+            <li>Store fruits in cool, well-ventilated areas</li>
+            <li>Grade fruits by quality before storage/sale</li>
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <img src="{{ image_url  }}" alt="Detected Fruit" class="uploaded-img">
+    {% endif %}
+  </div>
+
+
+  <script>
+    function toggleTheme(){
+      document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+    }
+
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const submitBtn = document.getElementById('submit-btn');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        submitBtn.style.display = 'block';
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) submitBtn.style.display = 'block';
+    });
+  </script>
+</body>
+</html>

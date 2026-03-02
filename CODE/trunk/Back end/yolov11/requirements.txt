@@ -1,0 +1,10 @@
+ultralytics==8.3.148
+ultralytics-thop==2.0.14
+torch==2.7.0
+torchvision==0.22.0
+torchaudio==2.7.0
+numpy==1.26.4
+opencv-python==4.11.0.86
+matplotlib==3.10.1
+tqdm==4.67.1
+PyYAML==6.0.2

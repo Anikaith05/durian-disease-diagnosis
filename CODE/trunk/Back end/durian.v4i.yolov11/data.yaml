@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 3
+names: ['damage', 'fungus', 'worm']
+
+roboflow:
+  workspace: project-32kkj
+  project: durian-tcen8
+  version: 4
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/project-32kkj/durian-tcen8/dataset/4

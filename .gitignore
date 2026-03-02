@@ -1,0 +1,28 @@
+# Ignore all zip files
+*.zip
+*.rar
+*.7z
+*.jpn
+*.jpeg
+*.jpg
+*.png
+
+
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore environment variables
+.env
+.venv
+venv/
+dataset leaf/
+test/
+train/
+valid/
+ABSTRACT/
+Base paper/
+DOCUMENT/
+PPT/
+VIDEO/

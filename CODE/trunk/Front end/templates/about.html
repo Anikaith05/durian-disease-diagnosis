@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Durian AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-dark: #0a2e0a;
+      --card-bg: #113311;
+      --input-bg: #0a1f0a;
+      --green: #00ff00;
+      --lime: #00cc00;
+      --gold: #ffd700;
+      --red: #ff3333;
+      --glow: 0 0 20px #00ff00, 0 0 40px #00ff00;
+    }
+    [data-theme=dark]{
+      --bg-dark: #000000;
+      --card-bg: #001100;
+      --input-bg: #001a00;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
+    body{
+      font-family: 'Share Tech Mono', monospace;
+      background: var(--bg-dark) url('../static/assets/durian-bg.jpg') center/cover fixed;
+      color: var(--green);
+      min-height:100vh;
+      position:relative;
+      text-shadow: 0 0 5px var(--green);
+    }
+    .overlay{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,40,0,.9);z-index:1;
+    }
+
+    /* === NAVBAR – EXACT FROM index.html === */
+    nav{
+      position:fixed;
+      top:20px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(0,50,0,.8);
+      backdrop-filter:blur(12px);
+      border:2px solid #00ff00;
+      border-radius:12px;
+      padding:.8rem 2rem;
+      display:flex;
+      align-items:center;
+      gap:1.5rem;
+      z-index:1000;
+      box-shadow:0 0 20px rgba(0,255,0,.6);
+      font-family: 'Orbitron', sans-serif;
+    }
+    .brand{
+      font-size:1.6rem;
+      color:var(--green);
+      font-weight:800;
+      text-shadow:0 0 15px var(--green);
+    }
+    nav a{
+      color:var(--green);
+      text-decoration:none;
+      font-weight:600;
+      padding:.5rem 1rem;
+      border-radius:8px;
+      transition:all .3s;
+      border:1px solid transparent;
+    }
+    nav a:hover{
+      background:var(--lime);
+      color:#000;
+      border:1px solid #00ff00;
+      box-shadow:0 0 15px var(--green);
+    }
+
+    /* === THEME TOGGLE – EXACT FROM index.html === */
+    .theme-btn{
+      position:fixed;
+      top:25px;
+      right:25px;
+      background:rgba(0,50,0,.8);
+      border:2px solid var(--green);
+      width:58px;
+      height:58px;
+      border-radius:50%;
+      font-size:1.7rem;
+      color:var(--green);
+      cursor:pointer;
+      z-index:1000;
+      transition:.3s;
+      box-shadow:0 0 15px rgba(0,255,0,.5);
+    }
+    .theme-btn:hover{
+      transform:scale(1.1);
+      box-shadow:0 0 25px var(--green);
+    }
+
+    /* === MAIN CONTENT === */
+    main{
+      position:relative;
+      z-index:10;
+      max-width:1300px;
+      margin:0 auto;
+      padding: 160px 2rem 6rem; /* Clear navbar space */
+    }
+    .intro{
+      display:grid;
+      grid-template-columns:1fr 1.4fr;
+      gap:3.5rem;
+      align-items:center;
+      margin-bottom:5rem;
+    }
+    .intro img{
+      width:100%;
+      border-radius:18px;
+      border:3px solid var(--green);
+      box-shadow:0 0 35px rgba(0,255,0,.5);
+      transform:perspective(1000px) rotateY(-6deg);
+      transition:.7s;
+    }
+    .intro img:hover{
+      transform:perspective(1000px) rotateY(0);
+      box-shadow:0 0 60px var(--green), 0 0 90px var(--green);
+    }
+    .intro-text{
+      background:var(--card-bg);
+      border:2px solid var(--green);
+      padding:2.8rem;
+      border-radius:18px;
+      line-height:2;
+      font-size:1.15rem;
+      box-shadow:0 0 30px rgba(0,255,0,.4), inset 0 0 20px rgba(0,255,0,.15);
+    }
+
+    /* === CARDS === */
+    .card{
+      background:var(--card-bg);
+      border:2px solid var(--green);
+      border-radius:18px;
+      padding:2.8rem;
+      margin:3rem 0;
+      box-shadow:0 0 30px rgba(0,255,0,.4), inset 0 0 18px rgba(0,255,0,.1);
+      transition:.5s;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:'';
+      position:absolute;
+      top:-50%;left:-50%;width:200%;height:200%;
+      background:radial-gradient(circle,rgba(0,255,0,.25),transparent);
+      opacity:0;
+      transition:.8s;
+    }
+    .card:hover::before{opacity:1;}
+    .card:hover{
+      transform:translateY(-15px);
+      box-shadow:0 0 50px var(--green), 0 0 80px var(--green);
+    }
+    .card h2{
+      font-family:'Orbitron',sans-serif;
+      color:var(--lime);
+      font-size:2.3rem;
+      margin-bottom:1.5rem;
+      text-shadow:0 0 25px var(--green);
+      letter-spacing:1px;
+    }
+
+    .leaf-classes{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:1.2rem;
+      margin-top:1rem;
+    }
+    .leaf-classes li{
+      background:rgba(0,255,0,.12);
+      padding:.9rem 1.2rem;
+      border-radius:10px;
+      border:1px solid var(--green);
+      font-size:1.1rem;
+      font-weight:600;
+      text-align:center;
+      box-shadow:0 0 15px rgba(0,255,0,.3);
+      transition:.3s;
+    }
+    .leaf-classes li:hover{
+      background:var(--lime);
+      color:#000;
+      transform:scale(1.05);
+      box-shadow:0 0 25px var(--green);
+    }
+
+    .fruit-classes{
+      display:flex;
+      gap:1.5rem;
+      margin:1.2rem 0;
+      flex-wrap:wrap;
+    }
+    .fruit-classes span{
+      background:rgba(0,255,0,.15);
+      padding:.7rem 1.3rem;
+      border-radius:12px;
+      border:1px solid var(--green);
+      font-weight:600;
+      font-size:1.05rem;
+      box-shadow:0 0 12px rgba(0,255,0,.3);
+      transition:.3s;
+    }
+    .fruit-classes span:hover{
+      background:var(--lime);
+      color:#000;
+      transform:translateY(-3px);
+    }
+
+    /* === FOOTER – EXACT FROM index.html === */
+    footer{
+      position:relative;
+      z-index:10;
+      background:rgba(0,40,0,.8);
+      border-top:2px solid var(--green);
+      padding:2rem;
+      text-align:center;
+      font-size:.9rem;
+      color:var(--green);
+      box-shadow:0 -10px 20px rgba(0,255,0,.3);
+    }
+    .social a{
+      color:var(--green);
+      margin:0 1rem;
+      font-size:1.5rem;
+      transition:.3s;
+    }
+    .social a:hover{
+      color:var(--lime);
+      text-shadow:0 0 15px var(--green);
+    }
+
+    @media(max-width:992px){
+      .intro{grid-template-columns:1fr}
+      .intro img{transform:none}
+      .leaf-classes{grid-template-columns:1fr}
+      nav{flex-wrap:wrap;padding:.6rem;gap:1rem}
+      .brand{font-size:1.4rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <!-- Theme Toggle -->
+  <button class="theme-btn" onclick="toggleTheme()"></button>
+
+  <!-- NAVBAR – EXACT FROM index.html -->
+  <nav>
+    <div class="brand">Durian AI</div>
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('register') }}">Register</a>
+  </nav>
+
+  <main>
+    <div class="intro">
+      <img src="https://media.istockphoto.com/id/2182029393/photo/durian-fruit-in-fruit-orchard.jpg?s=612x612&w=0&k=20&c=RsucxfJVfLUgwSSfb0TltyvMzsEimejW9nVAOW9kmmk="
+           alt="Durian AI - Advanced Disease Detection">
+      <div class="intro-text">
+        <p><strong>Durian AI</strong> is an advanced AI platform engineered for precision agriculture. Leveraging deep convolutional neural networks and real-time object detection, it analyzes durian leaf and fruit images to identify diseases and defects with exceptional accuracy. The system empowers farmers to detect early-stage infections, enabling timely intervention and sustainable crop management. Powered by state-of-the-art models like ResNet, DenseNet, and YOLO, it delivers fast, reliable results on edge devices. Our vision: transform durian farming through intelligent, accessible, and eco-friendly technology for farmers worldwide.</p>
+      </div>
+    </div>
+
+    <!-- LEAF DISEASE CLASSIFICATION -->
+    <div class="card">
+      <h2>Leaf Disease Classification</h2>
+      <p>Our model detects <strong>5 critical leaf conditions</strong> with multi-class precision:</p>
+      <ul class="leaf-classes">
+        <li><code>ALGAL_LEAF_SPOT</code></li>
+        <li><code>ALLOCARIDARA_ATTACK</code></li>
+        <li><code>HEALTHY_LEAF</code></li>
+        <li><code>LEAF_BLIGHT</code></li>
+        <li><code>PHOMOPSIS_LEAF_SPOT</code></li>
+      </ul>
+    </div>
+
+    <!-- FRUIT DEFECT DETECTION -->
+    <div class="card">
+      <h2>Fruit Defect Detection</h2>
+      <p>Real-time YOLO-powered detection identifies physical damage and infections:</p>
+      <div class="fruit-classes">
+        <span><code>damage</code></span>
+        <span><code>fungus</code></span>
+        <span><code>worm</code></span>
+      </div>
+      <p style="margin-top:1.2rem;">Deployable on mobile and drone systems with high-speed inference.</p>
+    </div>
+  </main>
+
+
+  <script>
+    function toggleTheme(){
+      document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+    }
+  </script>
+</body>
+</html>
