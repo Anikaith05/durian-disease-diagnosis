@@ -42,7 +42,7 @@ The system is trained to identify the following specific conditions:
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### System Architecture
 ![Architecture](screenshots/architecture.png)
