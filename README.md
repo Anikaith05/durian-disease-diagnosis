@@ -46,15 +46,15 @@ The system is trained to identify the following specific conditions:
 
 ### System Architecture
 ![Architecture](screenshots/architecture.png)
-*The flow of data from user input to model prediction.*
+*  The flow of data from user input to model prediction.*
 
 ### Leaf Disease Prediction
 ![Leaf Result](screenshots/leaf_result.png)
-*Accurate classification of Algal Leaf Spot.*
+*  Accurate classification of Algal Leaf Spot.*
 
 ### Fruit Defect Detection
 ![Fruit Result](screenshots/fruit_result.png)
-*Real-time bounding box detection of fungus on Durian fruit.*
+*  Real-time bounding box detection of fungus on Durian fruit.*
 
 ### Model Performance
 ## Model Performance
